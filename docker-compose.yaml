@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - custom
+
+  app:
+    image: app
+    container_name: app_bot
+    build:
+      context: .
+    command: bash -c "python3 mongo_client.py && python3 main.py"
+    depends_on:
+      - mongo
+    networks:
+      - custom
+
+networks:
+  custom:
+    driver: bridge
